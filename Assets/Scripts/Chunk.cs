@@ -6,14 +6,19 @@ public class Chunk : MonoBehaviour
 {
     [SerializeField] Vector3 Size;
 
-
+    [SerializeField] float Range=10;
     public float GetSize()
     {
         return Size.z;
     }
+
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(transform.position, Size);
+        Gizmos.color = Color.cyan;
+        var center = new Vector3(transform.position.x, transform.position.y-Size.y/2, transform.position.z);
+        Gizmos.DrawWireCube(center, Size);
+        
     }
+
+
 }

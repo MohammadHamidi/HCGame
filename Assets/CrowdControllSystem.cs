@@ -7,7 +7,8 @@ public class CrowdControllSystem : MonoBehaviour
     int previusChildCount=1;
     [SerializeField] private float radious=.5f;
     [SerializeField] private float angle=137.508f;
-    // 
+
+    [SerializeField] private Transform runnersParent;
 
 
     private void Update()
@@ -17,9 +18,9 @@ public class CrowdControllSystem : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (previusChildCount != transform.childCount)
+        if (previusChildCount != runnersParent.childCount)
         {
-            previusChildCount = transform.childCount;
+            previusChildCount = runnersParent.childCount;
             Debug.Log($"Child Count Changed {previusChildCount}");
            
         }
@@ -28,11 +29,11 @@ public class CrowdControllSystem : MonoBehaviour
 
     private void ChangeChildOrientation()
     {
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < runnersParent.childCount; i++)
         {
-            var child=transform.GetChild(i);
+            var child= runnersParent.GetChild(i);
             child.localPosition = GetRunnerLocalPosition(i);
-            child.transform.localRotation = transform.localRotation;
+            child.transform.localRotation = runnersParent.localRotation;
 
         }
     }
@@ -40,6 +41,6 @@ public class CrowdControllSystem : MonoBehaviour
     {
         float x = radious * Mathf.Sqrt(index) * Mathf.Cos(Mathf.Deg2Rad * index * angle);
         float z = radious * Mathf.Sqrt(index) * Mathf.Sin(Mathf.Deg2Rad * index * angle);
-        return new Vector3(x, transform.localPosition.y, z);
+        return new Vector3(x, runnersParent.localPosition.y, z);
     }
 }

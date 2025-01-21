@@ -194,4 +194,19 @@ public class CrowdSystem : MonoBehaviour
 
         return new Vector3(x, transform.localPosition.y, z);
     }
+
+    public void ApplyBonus(BonusType bonusType, int bonusAmount)
+    {
+        switch (bonusType)
+        {
+            case BonusType.Addition:
+                break;
+            case BonusType.Difference:
+                break;
+            case BonusType.Product:
+                break;
+            case BonusType.Division:
+                break;
+        }
+    }
 }

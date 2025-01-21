@@ -60,7 +60,7 @@ using UnityEngine.InputSystem;
 
             
             var postion= clickedPlayerPosition + Vector3.right*xScreenDifrence;
-            postion.x = Mathf.Clamp(postion.x, - roadWidht / 2 + crowdSystem.GetRadius(),  roadWidht / 2 - crowdSystem.GetRadius());
+            //postion.x = Mathf.Clamp(postion.x, - roadWidht / 2 + crowdSystem.GetRadius(),  roadWidht / 2 - crowdSystem.GetRadius());
             transform.position = new Vector3 (postion.x,postion.y,transform.position.z);
         } 
     }
