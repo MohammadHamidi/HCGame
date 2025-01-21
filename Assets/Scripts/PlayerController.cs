@@ -18,7 +18,7 @@ using UnityEngine.InputSystem;
     Vector3 clickedScreenPosition =Vector3.zero;
     Vector3 clickedPlayerPosition =Vector3.zero;
     [SerializeField] CrowdSystem crowdSystem;
-    float roadWidht = 10;
+    float roadWidht = 6;
     void Start()
     {
         
@@ -60,7 +60,7 @@ using UnityEngine.InputSystem;
 
             
             var postion= clickedPlayerPosition + Vector3.right*xScreenDifrence;
-           // postion.x = Mathf.Clamp(postion.x, - roadWidht / 2+crowdSystem.GetRadius(), + roadWidht / 2 - crowdSystem.GetRadius());
+            postion.x = Mathf.Clamp(postion.x, - roadWidht / 2 + crowdSystem.GetRadius(),  roadWidht / 2 - crowdSystem.GetRadius());
             transform.position = new Vector3 (postion.x,postion.y,transform.position.z);
         } 
     }

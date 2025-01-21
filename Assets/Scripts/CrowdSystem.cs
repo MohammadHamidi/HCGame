@@ -87,7 +87,7 @@ public class CrowdSystem : MonoBehaviour
     }
     public float GetRadius()
     {
-        return radius * Mathf.Sqrt(transform.childCount);
+        return radius * Mathf.Sqrt(transform.childCount)*2f;    
     }
     public Vector3 GetRunnerLocalPosition(int index)
     {
