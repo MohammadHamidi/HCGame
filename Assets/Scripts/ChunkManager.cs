@@ -7,12 +7,12 @@ public class ChunkManager : MonoBehaviour
     [Header("Level Generation")]
     [SerializeField] private Chunk[] chunks;
     [SerializeField] private LevelSO[] levels;
-
+    [SerializeField] private int chunckCount;
     [Header("References")]
     private GameObject finishLine;
     private Vector3 position = Vector3.zero;
     public static ChunkManager instance;
-
+    public Chunk FinishChunk;
     private void Awake() 
     {
         if (instance != null) 
@@ -31,16 +31,18 @@ public class ChunkManager : MonoBehaviour
         }
         else
         {
-            CreateRandomLevel(8);
+            CreateRandomLevel(chunckCount);
         }
-        SetupFinishLine();
+
+        finishLine=GameObject.FindWithTag("FinishLine");
     }
 
     private void GenerateLevel() 
     {
         int currentLevel = GetLevel() % levels.Length;
         LevelSO level = levels[currentLevel];
-        CreatePredefinedLevel(level.chunks);
+        //CreatePredefinedLevel(level.chunks);
+        CreateRandomLevel(chunckCount);
     }
 
     private void CreatePredefinedLevel(Chunk[] levelChunks)
@@ -72,15 +74,20 @@ public class ChunkManager : MonoBehaviour
             {
                 position.z += chunkPrefab.GetSize() / 2;
             }
+            if (i == count - 2)
+            {
+                Instantiate(FinishChunk, position, Quaternion.identity, transform);
+
+            }
 
             var instance = Instantiate(chunkPrefab, position, Quaternion.identity, transform);
             position.z += instance.GetSize() / 2;
         }
     }
 
-    private void SetupFinishLine()
+    public Transform GetFinishLine()
     {
-        finishLine = GameObject.FindGameObjectWithTag("Finish");
+        return finishLine.transform;
     }
 
     public float GetPlayerProgress() 

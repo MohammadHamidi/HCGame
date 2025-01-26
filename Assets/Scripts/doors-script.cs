@@ -1,31 +1,55 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 // Enum to define different types of bonuses the doors can have
 public enum BonusType
 {
-    Addition,
-    Difference,
-    Product,
-    Division
+    Addition,// Add +
+    Difference,// Subtract -
+    Product, // Multiply *
+    Division // '/.
 }
+
+
+// Player -> Door ( + *) (- , /)
 
 public class Doors : MonoBehaviour
 {
-    // Elements References
+
+    [Header("Bouns Type")]
+    [SerializeField] private BonusType rightDoorBonusType;
+
+    [SerializeField] private int rightDoorBonusAmount;
+    [SerializeField] private Color bonusColor;
+    [Space]
+    [SerializeField] private BonusType leftDoorBonusType;
+    [SerializeField] private int leftDoorBonusAmount;
+
+    
+    [SerializeField] private Color penaltyColor;
+    [Space(3)]
+
+    [Header("Sprite Refrneces")]
     [SerializeField] private SpriteRenderer rightDoorRenderer;
     [SerializeField] private SpriteRenderer leftDoorRenderer;
+    [Space(3)]
+    [Header("Text Refrneces")]
     [SerializeField] private TextMeshPro rightDoorText;
     [SerializeField] private TextMeshPro leftDoorText;
+    
+    [Space(3)]
+    [Header("Doors Collider")]
+
     [SerializeField] private Collider doorsCollider;
 
-    // Door Settings
-    [SerializeField] private BonusType rightDoorBonusType;
-    [SerializeField] private BonusType leftDoorBonusType;
-    [SerializeField] private int rightDoorBonusAmount;
-    [SerializeField] private int leftDoorBonusAmount;
-    [SerializeField] private Color bonusColor;
-    [SerializeField] private Color penaltyColor;
+    
+    
+
+
+    // Configure the Doors 
+
+
 
     private void Start()
     {
@@ -34,53 +58,86 @@ public class Doors : MonoBehaviour
 
     private void ConfigureDoors()
     {
-        // Configure right door
         switch (rightDoorBonusType)
         {
             case BonusType.Addition:
-                rightDoorRenderer.color = bonusColor;
-                rightDoorText.text = "+" + rightDoorBonusAmount;
+                rightDoorText.text = $"+ {rightDoorBonusAmount}";
                 break;
             case BonusType.Difference:
-                rightDoorRenderer.color = penaltyColor;
-                rightDoorText.text = "-" + rightDoorBonusAmount;
+                rightDoorText.text = $"- {rightDoorBonusAmount}";
                 break;
             case BonusType.Product:
-                rightDoorRenderer.color = bonusColor;
-                rightDoorText.text = "×" + rightDoorBonusAmount;
+                rightDoorText.text = $"x {rightDoorBonusAmount}";
                 break;
             case BonusType.Division:
-                rightDoorRenderer.color = penaltyColor;
-                rightDoorText.text = "÷" + rightDoorBonusAmount;
+                rightDoorText.text = $"/ {rightDoorBonusAmount}";
                 break;
         }
-
-        // Configure left door
         switch (leftDoorBonusType)
         {
             case BonusType.Addition:
-                leftDoorRenderer.color = bonusColor;
-                leftDoorText.text = "+" + leftDoorBonusAmount;
+                leftDoorText.text = $"+ {leftDoorBonusAmount}";
                 break;
             case BonusType.Difference:
-                leftDoorRenderer.color = penaltyColor;
-                leftDoorText.text = "-" + leftDoorBonusAmount;
+                leftDoorText.text = $"- {leftDoorBonusAmount}";
                 break;
             case BonusType.Product:
-                leftDoorRenderer.color = bonusColor;
-                leftDoorText.text = "×" + leftDoorBonusAmount;
+                leftDoorText.text = $"x {leftDoorBonusAmount}";
                 break;
             case BonusType.Division:
-                leftDoorRenderer.color = penaltyColor;
-                leftDoorText.text = "÷" + leftDoorBonusAmount;
+                leftDoorText.text = $"/ {leftDoorBonusAmount}";
+                break;
+        }
+        ChangeDoorColor(leftDoorRenderer, leftDoorBonusType);
+        ChangeDoorColor(rightDoorRenderer, rightDoorBonusType);
+    }
+
+    private void ChangeDoorColor(SpriteRenderer doorSpriteRenderer, BonusType bonusType)
+    {
+        switch (bonusType)
+        {
+            case BonusType.Addition:
+                doorSpriteRenderer.color = bonusColor;
+                break;
+            case BonusType.Difference:
+                doorSpriteRenderer.color = penaltyColor;
+                break;
+            case BonusType.Product:
+                doorSpriteRenderer.color = bonusColor;
+                break;
+            case BonusType.Division:
+                doorSpriteRenderer.color = penaltyColor;
                 break;
         }
     }
 
+    public BonusType GetBonusType()
+    {
+        return rightDoorBonusType;
+    }
+
+    public int GetBonusAmount()
+    {
+        return rightDoorBonusAmount;
+    }
+
+
     // Returns the bonus type based on player position
     public BonusType GetBonusType(float xPosition)
     {
-        return xPosition > 0 ? rightDoorBonusType : leftDoorBonusType;
+
+        if (xPosition > 0)
+        {
+            //right
+        }
+        else
+        {
+            //left
+        }
+
+        var returningValue = xPosition > 0 ? rightDoorBonusType : leftDoorBonusType;
+        return returningValue;
+        //return xPosition > 0 ? rightDoorBonusType : leftDoorBonusType;
     }
 
     // Returns the bonus amount based on player position

@@ -1,18 +1,9 @@
- using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
- using UnityEngine.Serialization;
-// GameManager.cs
-using UnityEngine;
-
- // UIManager.cs
-
-
- // LevelSO.cs
-
-
- public class PlayerController : MonoBehaviour
+using UnityEngine.Serialization;
+public class PlayerController : MonoBehaviour
 {
     [FormerlySerializedAs("SLideSpeed")]
     [Header("Settings")]
@@ -22,7 +13,8 @@ using UnityEngine;
     [FormerlySerializedAs("speed")]
     [Header("Slide_Speed")]
     [SerializeField] private float SLideSpeed = 0;
-    
+    [SerializeField] private GameObject cam2;
+    [SerializeField] private GameObject cam1;
     Vector3 clickedScreenPosition =Vector3.zero;
     Vector3 clickedPlayerPosition =Vector3.zero;
     [SerializeField] CrowdSystem crowdSystem;
@@ -77,6 +69,19 @@ using UnityEngine;
 
     private void Running()
     {
+        var distance = ( ChunkManager.instance.GetFinishLine().position.z-transform.position.z);
+        //Debug.Log($" Distance to Finish Line ({distance})");
+        //Debug.Log($" Distance to Finish Line  Abs ({Mathf.Abs(distance)}) Abs");
+        if (Mathf.Abs(distance) <= 1)
+        {
+            //transform.LookAt(cam2.transform.position);
+            GameEventManager.OnStopRunning();
+            cam2.gameObject.SetActive(true);
+            cam1.gameObject.SetActive(false);
+            return; 
+        }
+        
+
         transform.position += Vector3.forward * Forwardspeed* Time.deltaTime;
     }
 
