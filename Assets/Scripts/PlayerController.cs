@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
  using UnityEngine.Serialization;
+// GameManager.cs
+using UnityEngine;
+
+ // UIManager.cs
+
+
+ // LevelSO.cs
+
 
  public class PlayerController : MonoBehaviour
 {
@@ -19,6 +27,8 @@ using UnityEngine.InputSystem;
     Vector3 clickedPlayerPosition =Vector3.zero;
     [SerializeField] CrowdSystem crowdSystem;
     float roadWidht = 6;
+    public static PlayerController instance { get; set; }
+
     void Start()
     {
         

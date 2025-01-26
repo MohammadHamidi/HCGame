@@ -38,6 +38,16 @@ using UnityEngine;
 using System;
 using UnityEngine;
 
+
+// Enemy.cs
+using UnityEngine;
+
+// Runner.cs
+
+
+// EnemyGroup.cs
+
+
 public class CrowdSystem : MonoBehaviour
 {
     public enum SpiralType
