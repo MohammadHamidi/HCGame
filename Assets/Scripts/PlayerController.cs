@@ -20,7 +20,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] CrowdSystem crowdSystem;
     float roadWidht = 6;
     public static PlayerController instance { get; set; }
-
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         
@@ -43,6 +46,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameManager.instance.IsGameState()) return;
         Running();
         ManageControl();
     }

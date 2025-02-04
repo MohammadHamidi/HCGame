@@ -1,19 +1,26 @@
 using System;
 using UnityEngine;
 
+
+public enum GameState
+{
+    Menu,
+    Game,
+    LevelComplete,
+    GameOver
+}
 public class GameManager : MonoBehaviour 
 {
+    // Singltone
     public static GameManager instance;
+    
+    
+    
     private GameState gameState;
+
     public static Action<GameState> onGameStateChanged;
 
-    public enum GameState 
-    {
-        Menu,
-        Game,
-        LevelComplete,
-        GameOver
-    }
+   
 
     private void Awake() 
     {

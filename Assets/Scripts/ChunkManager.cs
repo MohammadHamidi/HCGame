@@ -13,6 +13,8 @@ public class ChunkManager : MonoBehaviour
     private Vector3 position = Vector3.zero;
     public static ChunkManager instance;
     public Chunk FinishChunk;
+
+    public List<Chunk> allChuns=new List<Chunk>();
     private void Awake() 
     {
         if (instance != null) 
@@ -69,18 +71,19 @@ public class ChunkManager : MonoBehaviour
         {
             Chunk chunkPrefab = GetRandomChunk();
             if (chunkPrefab == null) continue;
-
+            
             if (position.z > 0)
             {
                 position.z += chunkPrefab.GetSize() / 2;
             }
             if (i == count - 2)
             {
-                Instantiate(FinishChunk, position, Quaternion.identity, transform);
-
+             var chunk=   Instantiate(FinishChunk, position, Quaternion.identity, transform);
+                
             }
 
             var instance = Instantiate(chunkPrefab, position, Quaternion.identity, transform);
+            allChuns.Add(instance);
             position.z += instance.GetSize() / 2;
         }
     }
@@ -90,14 +93,37 @@ public class ChunkManager : MonoBehaviour
         return finishLine.transform;
     }
 
-    public float GetPlayerProgress() 
+    //public float GetPlayerProgress() 
+    //{
+    //    if (!PlayerController.instance || !finishLine) return 0;
+
+    //    float playerZ = PlayerController.instance.transform.position.z;
+    //    float finishZ = finishLine.transform.position.z;
+    //    return playerZ / finishZ;
+    //}
+
+    public float GetPlayerProgress()
     {
-        if (!PlayerController.instance || !finishLine) return 0;
-        
-        float playerZ = PlayerController.instance.transform.position.z;
-        float finishZ = finishLine.transform.position.z;
-        return playerZ / finishZ;
+        var playerPos = PlayerController.instance.transform.position;
+        var levelEnd = GetFinishLine().position;
+        var Distance = playerPos.z /levelEnd.z ;
+        var Progress=Distance / CalculateLevelLength();
+        Debug.Log($"==============Progress : {Progress}");
+        return Progress*10;
     }
+
+    private float CalculateLevelLength()
+    {
+        float levelLength = 0;
+        foreach (var item in chunks)
+        {
+            if (item == null) continue;
+            levelLength+=item.GetSize();
+        }
+        Debug.Log($"Level Length is {levelLength}");
+        return levelLength;
+    }
+
 
     public int GetLevel() 
     {

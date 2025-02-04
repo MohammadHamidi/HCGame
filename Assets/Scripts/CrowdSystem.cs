@@ -55,6 +55,13 @@ public class CrowdSystem : MonoBehaviour
         }
     }
 
+    private void CheckRunnersCount()
+    {
+        if (runnerParent.childCount <= 0)
+        {
+            GameManager.instance.SetGameState(GameState.GameOver);
+        }
+    }
     private void DevideRunnres(int amount)
     {
         var runnersCount = GetRunnerCount();

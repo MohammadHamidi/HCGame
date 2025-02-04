@@ -2,9 +2,19 @@ using UnityEngine;
 
 public class Runner : MonoBehaviour 
 {
-    private bool isTarget = false;
+    public bool isTarget = false;
 
-
+    private void Update()
+    {
+        if (GameManager.instance.IsGameState())
+        {
+            StartRunning();
+        }
+        else
+        {
+            StopRunning();
+        }
+    }
     private void OnEnable()
     {
         GameEventManager.StopRunning += StopRunning;
@@ -18,7 +28,12 @@ public class Runner : MonoBehaviour
     {
         GetComponent<Animator>().Play("Breathing Idle");
     }
-    public bool IsTarget() => isTarget;
+
+    private void StartRunning()
+    {
+        GetComponent<Animator>().Play("Fast Run");
+    }
+
 
     public void SetTarget() 
     {

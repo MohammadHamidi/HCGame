@@ -1,76 +1,123 @@
 using UnityEngine;
 
+public enum EnemyState
+{
+    Idle,Attacking
+}
+
 public class Enemy : MonoBehaviour 
 {
-    private enum State 
-    {
-        Idle,
-        Running
-    }
 
-    [Header("Settings")]
+
+    // Search Player 
+    // Atack Player
+
+    private EnemyState state;
+    //[Header("Settings")]
     [SerializeField] private float searchRadius = 5f;
-    [SerializeField] private float moveSpeed = 10f;
-    
-    private State state;
+    [SerializeField] float runningSpeed=1;
+    [SerializeField] float attackRange=.3f;
+
+
+    //private State state;
     private Transform targetRunner;
 
-    private void Update() 
+    private void Start()
     {
-        ManageState();
+        state = EnemyState.Idle;
     }
-
-    private void ManageState() 
+    private void OnDrawGizmos()
     {
-        switch (state) 
-        {
-            case State.Idle:
-                SearchForTarget();
-                break;
-            case State.Running:
-                RunTowardsTarget();
-                break;
-        }
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, searchRadius);
     }
-
-    private void SearchForTarget() 
+    private void SerachForPlayer()
     {
-        Collider[] detectedColliders = Physics.OverlapSphere(transform.position, searchRadius);
-        
-        for (int i = 0; i < detectedColliders.Length; i++) 
+       var Players= Physics.OverlapSphere(transform.position, searchRadius);
+        for (int i = 0; i < Players.Length; i++)
         {
-            if (detectedColliders[i].TryGetComponent<Runner>(out Runner runner)) 
+            var player = Players[i].GetComponent<Runner>();
+            if (player!= null && !player.isTarget)
             {
-                if (runner.IsTarget()) continue;
-                
-                runner.SetTarget();
-                targetRunner = runner.transform;
-                StartRunningTowardsTarget();
+                targetRunner = player.transform;
+                player.SetTarget();
+                state = EnemyState.Attacking;
                 break;
             }
         }
     }
-
-    private void RunTowardsTarget() 
+    private void Update()
     {
-        if (targetRunner == null) return;
-
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            targetRunner.position,
-            moveSpeed * Time.deltaTime
-        );
-
-        if (Vector3.Distance(transform.position, targetRunner.position) < 0.1f) 
+        UpdateStateBehaviour();
+    }
+    private void UpdateStateBehaviour()
+    {
+        switch (state)
         {
-            Destroy(targetRunner.gameObject);
-            Destroy(gameObject);
+            case EnemyState.Idle:
+                IdleStateBehaviur();
+                break;
+            case EnemyState.Attacking:
+                AtackStateBehaviur();
+
+                break;
+
         }
     }
-
-    private void StartRunningTowardsTarget() 
+    private void IdleStateBehaviur()
     {
-        state = State.Running;
-        GetComponent<Animator>().Play("Run");
+        var animator=gameObject.GetComponent<Animator>();
+        animator.Play("Breathing Idle");
+        SerachForPlayer();
     }
+    private void AtackStateBehaviur()
+    {
+        var animator = gameObject.GetComponent<Animator>();
+        transform.LookAt(targetRunner);
+        RunTowardTarget();
+        animator.Play("Fast Run");
+
+    }
+
+    private void RunTowardTarget()
+    {
+        if (targetRunner != null)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetRunner.position, Time.deltaTime * runningSpeed);
+            if (Vector3.Distance(transform.position, targetRunner.position) <= attackRange)
+            {
+                Destroy(targetRunner.gameObject);
+                Destroy(gameObject);
+            }
+        }
+
+
+    }
+
+   
+    //private void RunTowardsTarget() 
+    //{
+    //    if (targetRunner == null) return;
+
+    //    transform.position = Vector3.MoveTowards(
+    //        transform.position,
+    //        targetRunner.position,
+    //        moveSpeed * Time.deltaTime
+    //    );
+
+    //    if (Vector3.Distance(transform.position, targetRunner.position) < 0.1f) 
+    //    {
+    //        Destroy(targetRunner.gameObject);
+    //        Destroy(gameObject);
+    //    }
+    //}
+
+    //private void StartRunningTowardsTarget() 
+    //{
+    //    state = State.Running;
+    //    GetComponent<Animator>().Play("Run");
+    //}
+
+
+
 }
