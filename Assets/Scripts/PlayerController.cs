@@ -46,7 +46,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameManager.instance.IsGameState()) return;
+        if (!GameManager.instance.IsGameState())
+        {
+            
+            return;
+        }
+
         Running();
         ManageControl();
     }

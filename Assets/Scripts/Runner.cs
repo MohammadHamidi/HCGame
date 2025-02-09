@@ -3,17 +3,15 @@ using UnityEngine;
 public class Runner : MonoBehaviour 
 {
     public bool isTarget = false;
-
+    public bool StopedRunning = false;
     private void Update()
     {
-        if (GameManager.instance.IsGameState())
-        {
-            StartRunning();
-        }
-        else
-        {
-            StopRunning();
-        }
+        // if (StopedRunning)return;
+        // if (GameManager.instance.IsGameState())
+        // {
+        //     StartRunning();
+        // }
+       
     }
     private void OnEnable()
     {
@@ -26,11 +24,13 @@ public class Runner : MonoBehaviour
 
     private void StopRunning()
     {
-        GetComponent<Animator>().Play("Breathing Idle");
+        StopedRunning = true;
+        GetComponent<Animator>().Play("Victory");
+        
     }
 
     private void StartRunning()
-    {
+    {StopedRunning = false;
         GetComponent<Animator>().Play("Fast Run");
     }
 

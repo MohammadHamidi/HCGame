@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum EnemyState
 {
-    Idle,Attacking
+    Idle,Attacking,Running,Death,Victory
 }
 
 public class Enemy : MonoBehaviour 
@@ -31,6 +31,8 @@ public class Enemy : MonoBehaviour
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, searchRadius);
     }
+    
+    // Player In Range 
     private void SerachForPlayer()
     {
        var Players= Physics.OverlapSphere(transform.position, searchRadius);
@@ -41,7 +43,7 @@ public class Enemy : MonoBehaviour
             {
                 targetRunner = player.transform;
                 player.SetTarget();
-                state = EnemyState.Attacking;
+                state = EnemyState.Running;
                 break;
             }
         }
@@ -57,11 +59,18 @@ public class Enemy : MonoBehaviour
             case EnemyState.Idle:
                 IdleStateBehaviur();
                 break;
-            case EnemyState.Attacking:
-                AtackStateBehaviur();
-
+            case EnemyState.Running:
+                RunnungTowardStateBehaviur();
                 break;
-
+            case EnemyState.Attacking:
+                AtakingStateBehaviour();
+                break;
+            case EnemyState.Victory:
+                
+                break;
+            case EnemyState.Death:
+                
+                break;
         }
     }
     private void IdleStateBehaviur()
@@ -70,13 +79,24 @@ public class Enemy : MonoBehaviour
         animator.Play("Breathing Idle");
         SerachForPlayer();
     }
-    private void AtackStateBehaviur()
+    private void RunnungTowardStateBehaviur()
     {
         var animator = gameObject.GetComponent<Animator>();
         transform.LookAt(targetRunner);
         RunTowardTarget();
         animator.Play("Fast Run");
+        // Distance Runner -Target < ?
+        if (Vector3.Distance(transform.position,targetRunner.position)<1)
+        {
+            state = EnemyState.Attacking;
+        }
+        
+    }
 
+    private void AtakingStateBehaviour()
+    {
+        var animator = gameObject.GetComponent<Animator>();
+        animator.Play("Fight");
     }
 
     private void RunTowardTarget()
